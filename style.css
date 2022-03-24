@@ -1,0 +1,105 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-image: url("./static/img/background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+button {
+  background: inherit;
+  box-shadow: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 200ms ease-in;
+}
+button:hover {
+  transform: scale(1.1);
+}
+.game {
+  width: 100%;
+  height: 100%;
+}
+.game-header {
+  height: 33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.game-btn {
+  width: 100px;
+  height: 100px;
+  border: 4px solid black;
+  border-radius: 5px;
+  background-color: wheat;
+}
+
+.fa-play {
+  font-size: 50px;
+}
+.game-timer {
+  background-color: white;
+  padding: 15px 120px;
+  font-size: 55px;
+  font-weight: bolder;
+  border: 5px solid black;
+  border-radius: 20px;
+}
+.game-score {
+  text-align: center;
+  width: 100px;
+  height: 100px;
+  color: white;
+  background-color: darksalmon;
+  font-size: 70px;
+  font-weight: bolder;
+  border-radius: 50%;
+  border: 3px solid black;
+}
+
+/* 필드 */
+.game-field {
+  width: 100%;
+  height: 50%;
+  margin-top: 200px;
+}
+.game-field img {
+  cursor: pointer;
+}
+
+/* 팝업 */
+.pop-up {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(10, 10, 10, 0.7);
+  border-radius: 30px;
+  width: 50%;
+  height: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.hide {
+  display: none;
+}
+.pop-up-refresh {
+  cursor: pointer;
+  border: 2px solid black;
+  border-radius: 50%;
+  background-color: wheat;
+  padding: 25px;
+  font-size: 60px;
+}
+.pop-up-message {
+  color: white;
+  font-size: 70px;
+  font-weight: bolder;
+}

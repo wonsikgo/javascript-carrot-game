@@ -5,6 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>당근찾기</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js"></script>
+    <script
+      src="https://kit.fontawesome.com/e84213e6cb.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
-  <body></body>
+  <body>
+    <section class="game">
+      <header class="game-header">
+        <button class="game-btn">
+          <i class="fa-solid fa-play"></i>
+        </button>
+        <div class="game-timer">0:2</div>
+        <div class="game-score">0</div>
+      </header>
+      <section class="game-field">
+        <img src="./static/img/carrot.png" alt="carrot-image" />
+        <img src="./static/img/bug.png" alt="bug-image" />
+      </section>
+    </section>
+    <section class="pop-up">
+      <button class="pop-up-refresh">
+        <i class="fa-solid fa-arrow-rotate-right"></i>
+      </button>
+      <div class="pop-up-message">REPLAY?</div>
+    </section>
+  </body>
 </html>
