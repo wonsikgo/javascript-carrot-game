@@ -27,8 +27,25 @@ let playInterval = null;
 playBtn.addEventListener("click", onPlayGame);
 refreshBtn.addEventListener("click", onReStartGame);
 
+const bgm = new Audio("./static/sound/bg.mp3");
+const alertSound = new Audio("./static/sound/alert.wav");
+const gameWinSound = new Audio("./static/sound/game_win.mp3");
+const carrotPullSound = new Audio("./static/sound/carrot_pull.mp3");
+const bugPullSound = new Audio("./static/sound/bug_pull.mp3");
+
+function playBgmSound() {
+  if (bgm.paused) {
+    bgm.loop = false;
+    bgm.currentTime = 0;
+    bgm.play();
+  }
+}
+
 function onPlayGame() {
   isPlaying = !isPlaying;
+
+  playBgmSound();
+
   // 1. 플레이버튼 설정
   togglePlayBtnIcon();
 
@@ -58,7 +75,7 @@ function setTimer() {
         playTime -= 1;
         timer.innerHTML = `0:${playTime}`;
       } else if (playTime === 0 && scoreCount !== COUNT) {
-        onGameOver();
+        gameOver();
       } else {
         clearInterval(playInterval);
       }
@@ -75,8 +92,8 @@ function setItems() {
     const carrot = createItem("./static/img/carrot.png");
     const bug = createItem("./static/img/bug.png");
 
-    carrot.addEventListener("click", onPlusScore);
-    bug.addEventListener("click", onGameOver);
+    carrot.addEventListener("click", onClickCarrot);
+    bug.addEventListener("click", onClickBug);
 
     field.appendChild(carrot);
     field.appendChild(bug);
@@ -101,19 +118,36 @@ function setPosition(item) {
   return item;
 }
 
-function onPlusScore(e) {
+function onClickCarrot(e) {
+  playCarrotPullSound();
+  plusScore(e);
+}
+
+function plusScore(e) {
   e.target.remove();
+
   scoreCount += 1;
   score.innerHTML = scoreCount;
 
   if (scoreCount === COUNT) {
-    popup.classList.remove("hide");
-    popupMessage.innerHTML = POPUP_CLEAR_MESSAGE;
-    clearInterval(playInterval);
+    clearGame();
   }
 }
 
-function onGameOver() {
+function clearGame() {
+  playGameWinSound();
+  popup.classList.remove("hide");
+  popupMessage.innerHTML = POPUP_CLEAR_MESSAGE;
+  clearInterval(playInterval);
+}
+
+function onClickBug() {
+  playBugPullSound();
+  gameOver();
+}
+
+function gameOver() {
+  playAlertSound();
   popup.classList.remove("hide");
   popupMessage.innerHTML = POPUP_REPLAY_MESSAGE;
   clearInterval(playInterval);
@@ -134,4 +168,23 @@ function resetGame() {
   scoreCount = 0;
   score.innerHTML = scoreCount;
   field.innerHTML = "";
+}
+
+function playAlertSound() {
+  alertSound.currentTime = 0;
+  alertSound.play();
+}
+
+function playGameWinSound() {
+  gameWinSound.currentTime = 0;
+  gameWinSound.play();
+}
+
+function playCarrotPullSound() {
+  carrotPullSound.currentTime = 0;
+  carrotPullSound.play();
+}
+function playBugPullSound() {
+  bugPullSound.currentTime = 0;
+  bugPullSound.play();
 }
