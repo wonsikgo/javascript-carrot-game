@@ -20,12 +20,14 @@ const fieldHeight = field.getBoundingClientRect().height - 80;
 
 const popup = document.querySelector(".pop-up");
 const popupMessage = document.querySelector(".pop-up-message");
+const refreshBtn = document.querySelector(".pop-up-refresh");
 
 let playInterval = null;
 
-playBtn.addEventListener("click", onPlay);
+playBtn.addEventListener("click", onPlayGame);
+refreshBtn.addEventListener("click", onReStartGame);
 
-function onPlay() {
+function onPlayGame() {
   isPlaying = !isPlaying;
   // 1. 플레이버튼 설정
   togglePlayBtnIcon();
@@ -115,4 +117,21 @@ function onGameOver() {
   popup.classList.remove("hide");
   popupMessage.innerHTML = POPUP_REPLAY_MESSAGE;
   clearInterval(playInterval);
+}
+
+function onReStartGame() {
+  popup.classList.add("hide");
+  resetGame();
+  togglePlayBtnIcon();
+  setTimer();
+  setItems();
+}
+
+function resetGame() {
+  isPlaying = true;
+  isSetItem = false;
+  playTime = 10;
+  scoreCount = 0;
+  score.innerHTML = scoreCount;
+  field.innerHTML = "";
 }
