@@ -1,17 +1,27 @@
 "use strict";
 
 let isPlaying = false;
+let isSetItem = false;
 let playTime = 10;
+let scoreCount = 0;
 
 const COUNT = 5;
+const POPUP_REPLAY_MESSAGE = "REPLAY?";
+const POPUP_CLEAR_MESSAGE = "SUCCESS";
 
 const playBtn = document.querySelector(".game-btn");
 const playBtnIcon = document.querySelector(".play-icon");
 const timer = document.querySelector(".game-timer");
+const score = document.querySelector(".game-score");
 
 const field = document.querySelector(".game-field");
 const fieldWidth = field.getBoundingClientRect().width - 80;
 const fieldHeight = field.getBoundingClientRect().height - 80;
+
+const popup = document.querySelector(".pop-up");
+const popupMessage = document.querySelector(".pop-up-message");
+
+let playInterval = null;
 
 playBtn.addEventListener("click", onPlay);
 
@@ -39,24 +49,38 @@ function togglePlayBtnIcon() {
 
 function setTimer() {
   timer.innerHTML = `0:${playTime}`;
-  const playInterval = setInterval(() => {
-    if (playTime !== 0 && isPlaying) {
-      playTime -= 1;
-      timer.innerHTML = `0:${playTime}`;
-    } else {
-      clearInterval(playInterval);
-    }
-  }, 1000);
+
+  if (isPlaying) {
+    playInterval = setInterval(() => {
+      if (playTime !== 0) {
+        playTime -= 1;
+        timer.innerHTML = `0:${playTime}`;
+      } else if (playTime === 0 && scoreCount !== COUNT) {
+        onGameOver();
+      } else {
+        clearInterval(playInterval);
+      }
+    }, 1000);
+  } else {
+    clearInterval(playInterval);
+  }
 }
 
 function setItems() {
+  if (isSetItem) return;
+
   for (let i = 0; i < COUNT; i++) {
     const carrot = createItem("./static/img/carrot.png");
-    const bug = createBug("./static/img/bug.png");
+    const bug = createItem("./static/img/bug.png");
+
+    carrot.addEventListener("click", onPlusScore);
+    bug.addEventListener("click", onGameOver);
 
     field.appendChild(carrot);
     field.appendChild(bug);
   }
+
+  isSetItem = true;
 }
 
 function createItem(src) {
@@ -73,4 +97,22 @@ function setPosition(item) {
   item.style.top = `${positionY}px`;
 
   return item;
+}
+
+function onPlusScore(e) {
+  e.target.remove();
+  scoreCount += 1;
+  score.innerHTML = scoreCount;
+
+  if (scoreCount === COUNT) {
+    popup.classList.remove("hide");
+    popupMessage.innerHTML = POPUP_CLEAR_MESSAGE;
+    clearInterval(playInterval);
+  }
+}
+
+function onGameOver() {
+  popup.classList.remove("hide");
+  popupMessage.innerHTML = POPUP_REPLAY_MESSAGE;
+  clearInterval(playInterval);
 }
