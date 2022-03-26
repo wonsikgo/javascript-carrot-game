@@ -1,13 +1,13 @@
 "use strict";
 
+const COUNT = 10;
+const POPUP_REPLAY_MESSAGE = "REPLAY?";
+const POPUP_CLEAR_MESSAGE = "SUCCESS";
+
 let isPlaying = false;
 let isSetItem = false;
 let playTime = 10;
-let scoreCount = 0;
-
-const COUNT = 5;
-const POPUP_REPLAY_MESSAGE = "REPLAY?";
-const POPUP_CLEAR_MESSAGE = "SUCCESS";
+let scoreCount = COUNT;
 
 const playBtn = document.querySelector(".game-btn");
 const playBtnIcon = document.querySelector(".play-icon");
@@ -35,7 +35,6 @@ const bugPullSound = new Audio("./static/sound/bug_pull.mp3");
 
 function onPlayGame() {
   initItems();
-
   if (isPlaying) {
     stopGame();
   } else {
@@ -47,12 +46,14 @@ function onPlayGame() {
 
 function startGame() {
   hidePlayBtnIcon();
+  showField();
   playSound(bgm);
   setTimer();
 }
 
 function stopGame() {
   showPlayBtnIcon();
+  hideField();
   stopSound(bgm);
   clearInterval(playInterval);
 }
@@ -67,6 +68,14 @@ function hidePlayBtnIcon() {
   playBtnIcon.classList.add("fa-stop");
 }
 
+function showField() {
+  field.style.visibility = "visible";
+}
+
+function hideField() {
+  field.style.visibility = "hidden";
+}
+
 function setTimer() {
   timer.innerHTML = `0:${playTime}`;
 
@@ -74,7 +83,7 @@ function setTimer() {
     if (playTime !== 0) {
       playTime -= 1;
       timer.innerHTML = `0:${playTime}`;
-    } else if (playTime === 0 && scoreCount !== COUNT) {
+    } else if (playTime === 0 && scoreCount !== 0) {
       loseGame();
     } else {
       clearInterval(playInterval);
@@ -84,6 +93,8 @@ function setTimer() {
 
 function initItems() {
   if (isSetItem) return;
+
+  score.innerHTML = scoreCount;
 
   for (let i = 0; i < COUNT; i++) {
     const carrot = createItem("./static/img/carrot.png");
@@ -118,14 +129,14 @@ function setPosition(item) {
 function onClickCarrot(e) {
   e.target.remove();
   playSound(carrotPullSound);
-  plusScore();
+  updateScore();
 }
 
-function plusScore() {
-  scoreCount += 1;
+function updateScore() {
+  scoreCount -= 1;
   score.innerHTML = scoreCount;
 
-  if (scoreCount === COUNT) {
+  if (scoreCount === 0) {
     clearGame();
   }
 }
@@ -151,7 +162,7 @@ function onReStartGame() {
   hidePopup();
   resetGame();
   initItems();
-  showPlayBtnIcon();
+  hidePlayBtnIcon();
   setTimer();
 }
 
@@ -159,7 +170,7 @@ function resetGame() {
   isPlaying = true;
   isSetItem = false;
   playTime = 10;
-  scoreCount = 0;
+  scoreCount = COUNT;
   score.innerHTML = scoreCount;
   field.innerHTML = "";
 }
@@ -174,9 +185,10 @@ function hidePopup() {
 }
 
 function playSound(sound) {
+  sound.currentTime = 0;
   sound.play();
 }
 
-function stopSond(sound) {
+function stopSound(sound) {
   sound.pause();
 }
