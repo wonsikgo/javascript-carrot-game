@@ -136,8 +136,7 @@ function plusScore() {
 
 function clearGame() {
   playGameWinSound();
-  popup.classList.remove("hide");
-  popupMessage.innerHTML = POPUP_CLEAR_MESSAGE;
+  showPopup(POPUP_CLEAR_MESSAGE);
   clearInterval(playInterval);
 }
 
@@ -148,17 +147,25 @@ function onClickBug() {
 
 function gameOver() {
   playAlertSound();
-  popup.classList.remove("hide");
-  popupMessage.innerHTML = POPUP_REPLAY_MESSAGE;
+  showPopup(POPUP_REPLAY_MESSAGE);
   clearInterval(playInterval);
 }
 
 function onReStartGame() {
-  popup.classList.add("hide");
+  hidePopup();
   resetGame();
   togglePlayBtnIcon();
   setTimer();
   setItems();
+}
+
+function showPopup(message) {
+  popup.classList.remove("hide");
+  popupMessage.innerHTML = message;
+}
+
+function hidePopup() {
+  popup.classList.add("hide");
 }
 
 function resetGame() {
