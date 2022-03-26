@@ -28,7 +28,7 @@ playBtn.addEventListener("click", onPlayGame);
 refreshBtn.addEventListener("click", onReStartGame);
 
 const bgm = new Audio("./static/sound/bg.mp3");
-const alertSound = new Audio("./static/sound/alert.wav");
+const gameLoseSound = new Audio("./static/sound/alert.wav");
 const gameWinSound = new Audio("./static/sound/game_win.mp3");
 const carrotPullSound = new Audio("./static/sound/carrot_pull.mp3");
 const bugPullSound = new Audio("./static/sound/bug_pull.mp3");
@@ -121,7 +121,7 @@ function setPosition(item) {
 
 function onClickCarrot(e) {
   e.target.remove();
-  playCarrotPullSound();
+  playSound(carrotPullSound);
   plusScore();
 }
 
@@ -135,18 +135,18 @@ function plusScore() {
 }
 
 function clearGame() {
-  playGameWinSound();
+  playSound(gameWinSound);
   showPopup(POPUP_CLEAR_MESSAGE);
   clearInterval(playInterval);
 }
 
 function onClickBug() {
-  playBugPullSound();
+  playSound(bugPullSound);
   gameOver();
 }
 
 function gameOver() {
-  playAlertSound();
+  playSound(gameLoseSound);
   showPopup(POPUP_REPLAY_MESSAGE);
   clearInterval(playInterval);
 }
@@ -177,21 +177,7 @@ function resetGame() {
   field.innerHTML = "";
 }
 
-function playAlertSound() {
-  alertSound.currentTime = 0;
-  alertSound.play();
-}
-
-function playGameWinSound() {
-  gameWinSound.currentTime = 0;
-  gameWinSound.play();
-}
-
-function playCarrotPullSound() {
-  carrotPullSound.currentTime = 0;
-  carrotPullSound.play();
-}
-function playBugPullSound() {
-  bugPullSound.currentTime = 0;
-  bugPullSound.play();
+function playSound(sound) {
+  sound.currentTime = 0;
+  sound.play();
 }
