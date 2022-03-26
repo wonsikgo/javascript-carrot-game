@@ -33,14 +33,6 @@ const gameWinSound = new Audio("./static/sound/game_win.mp3");
 const carrotPullSound = new Audio("./static/sound/carrot_pull.mp3");
 const bugPullSound = new Audio("./static/sound/bug_pull.mp3");
 
-function playBgmSound() {
-  if (bgm.paused) {
-    bgm.loop = false;
-    bgm.currentTime = 0;
-    bgm.play();
-  }
-}
-
 function onPlayGame() {
   isPlaying = !isPlaying;
 
@@ -54,6 +46,15 @@ function onPlayGame() {
 
   // 3. 당근, 벌레위치 설정
   setItems();
+}
+
+function playBgmSound() {
+  if (bgm.paused) {
+    bgm.loop = false;
+    bgm.play();
+  } else {
+    bgm.pause();
+  }
 }
 
 function togglePlayBtnIcon() {
@@ -119,13 +120,12 @@ function setPosition(item) {
 }
 
 function onClickCarrot(e) {
+  e.target.remove();
   playCarrotPullSound();
-  plusScore(e);
+  plusScore();
 }
 
-function plusScore(e) {
-  e.target.remove();
-
+function plusScore() {
   scoreCount += 1;
   score.innerHTML = scoreCount;
 

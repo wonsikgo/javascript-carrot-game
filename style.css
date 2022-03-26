@@ -72,6 +72,10 @@ button:hover {
 .game-field img {
   position: absolute;
   cursor: pointer;
+  transition: transform 100ms ease-in;
+}
+.game-field img:hover {
+  transform: scale(1.1);
 }
 
 /* 팝업 */
