@@ -34,59 +34,55 @@ const carrotPullSound = new Audio("./static/sound/carrot_pull.mp3");
 const bugPullSound = new Audio("./static/sound/bug_pull.mp3");
 
 function onPlayGame() {
-  isPlaying = !isPlaying;
+  initItems();
 
-  playBgmSound();
-
-  // 1. 플레이버튼 설정
-  togglePlayBtnIcon();
-
-  // 2. 타이머 설정
-  setTimer();
-
-  // 3. 당근, 벌레위치 설정
-  setItems();
-}
-
-function playBgmSound() {
-  if (bgm.paused) {
-    bgm.loop = false;
-    bgm.play();
-  } else {
-    bgm.pause();
-  }
-}
-
-function togglePlayBtnIcon() {
   if (isPlaying) {
-    playBtnIcon.classList.remove("fa-play");
-    playBtnIcon.classList.add("fa-stop");
+    stopGame();
   } else {
-    playBtnIcon.classList.remove("fa-stop");
-    playBtnIcon.classList.add("fa-play");
+    startGame();
   }
+
+  isPlaying = !isPlaying;
+}
+
+function startGame() {
+  hidePlayBtnIcon();
+  playSound(bgm);
+  setTimer();
+}
+
+function stopGame() {
+  showPlayBtnIcon();
+  stopSound(bgm);
+  clearInterval(playInterval);
+}
+
+function showPlayBtnIcon() {
+  playBtnIcon.classList.remove("fa-stop");
+  playBtnIcon.classList.add("fa-play");
+}
+
+function hidePlayBtnIcon() {
+  playBtnIcon.classList.remove("fa-play");
+  playBtnIcon.classList.add("fa-stop");
 }
 
 function setTimer() {
   timer.innerHTML = `0:${playTime}`;
 
-  if (isPlaying) {
-    playInterval = setInterval(() => {
-      if (playTime !== 0) {
-        playTime -= 1;
-        timer.innerHTML = `0:${playTime}`;
-      } else if (playTime === 0 && scoreCount !== COUNT) {
-        gameOver();
-      } else {
-        clearInterval(playInterval);
-      }
-    }, 1000);
-  } else {
-    clearInterval(playInterval);
-  }
+  playInterval = setInterval(() => {
+    if (playTime !== 0) {
+      playTime -= 1;
+      timer.innerHTML = `0:${playTime}`;
+    } else if (playTime === 0 && scoreCount !== COUNT) {
+      loseGame();
+    } else {
+      clearInterval(playInterval);
+    }
+  }, 1000);
 }
 
-function setItems() {
+function initItems() {
   if (isSetItem) return;
 
   for (let i = 0; i < COUNT; i++) {
@@ -142,10 +138,10 @@ function clearGame() {
 
 function onClickBug() {
   playSound(bugPullSound);
-  gameOver();
+  loseGame();
 }
 
-function gameOver() {
+function loseGame() {
   playSound(gameLoseSound);
   showPopup(POPUP_REPLAY_MESSAGE);
   clearInterval(playInterval);
@@ -154,18 +150,9 @@ function gameOver() {
 function onReStartGame() {
   hidePopup();
   resetGame();
-  togglePlayBtnIcon();
+  initItems();
+  showPlayBtnIcon();
   setTimer();
-  setItems();
-}
-
-function showPopup(message) {
-  popup.classList.remove("hide");
-  popupMessage.innerHTML = message;
-}
-
-function hidePopup() {
-  popup.classList.add("hide");
 }
 
 function resetGame() {
@@ -177,7 +164,19 @@ function resetGame() {
   field.innerHTML = "";
 }
 
+function showPopup(message) {
+  popup.classList.remove("hide");
+  popupMessage.innerHTML = message;
+}
+
+function hidePopup() {
+  popup.classList.add("hide");
+}
+
 function playSound(sound) {
-  sound.currentTime = 0;
   sound.play();
+}
+
+function stopSond(sound) {
+  sound.pause();
 }
