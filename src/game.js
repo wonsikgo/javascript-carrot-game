@@ -1,3 +1,5 @@
+"use strict";
+
 class Game {
   constructor(count, playTime) {
     this.count = count;
@@ -7,7 +9,7 @@ class Game {
     this.scoreCound = count;
     this.playInterval = null;
     createGameField();
-    addEvent();
+    addPlayEventListener();
   }
 
   createGameField() {
@@ -20,7 +22,7 @@ class Game {
     this.fieldHeight = field.getBoundingClientRect().height - 80;
   }
 
-  addEvent() {
+  addPlayEventListener() {
     this.playBtn.addEventListener("click", onPlay);
   }
 
