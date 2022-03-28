@@ -1,5 +1,7 @@
 "use strict";
 
+import Popup from "./popup.js";
+
 const COUNT = 10;
 const POPUP_REPLAY_MESSAGE = "REPLAY?";
 const POPUP_CLEAR_MESSAGE = "SUCCESS";
@@ -18,20 +20,18 @@ const field = document.querySelector(".game-field");
 const fieldWidth = field.getBoundingClientRect().width - 80;
 const fieldHeight = field.getBoundingClientRect().height - 80;
 
-const popup = document.querySelector(".pop-up");
-const popupMessage = document.querySelector(".pop-up-message");
-const refreshBtn = document.querySelector(".pop-up-refresh");
-
 let playInterval = null;
 
 playBtn.addEventListener("click", onPlayGame);
-refreshBtn.addEventListener("click", onReStartGame);
 
 const bgm = new Audio("../static/sound/bg.mp3");
 const gameLoseSound = new Audio("../static/sound/alert.wav");
 const gameWinSound = new Audio("../static/sound/game_win.mp3");
 const carrotPullSound = new Audio("../static/sound/carrot_pull.mp3");
 const bugPullSound = new Audio("../static/sound/bug_pull.mp3");
+
+const gameBanner = new Popup();
+gameBanner.setEventListener(onReStartGame);
 
 function onPlayGame() {
   initItems();
@@ -143,8 +143,8 @@ function updateScore() {
 
 function clearGame() {
   playSound(gameWinSound);
-  showPopup(POPUP_CLEAR_MESSAGE);
   clearInterval(playInterval);
+  gameBanner.show(POPUP_CLEAR_MESSAGE);
 }
 
 function onClickBug() {
@@ -154,12 +154,12 @@ function onClickBug() {
 
 function loseGame() {
   playSound(gameLoseSound);
-  showPopup(POPUP_REPLAY_MESSAGE);
+  gameBanner.show(POPUP_REPLAY_MESSAGE);
   clearInterval(playInterval);
 }
 
 function onReStartGame() {
-  hidePopup();
+  gameBanner.hide(POPUP_CLEAR_MESSAGE);
   resetGame();
   initItems();
   hidePlayBtnIcon();
@@ -173,15 +173,6 @@ function resetGame() {
   scoreCount = COUNT;
   score.innerHTML = scoreCount;
   field.innerHTML = "";
-}
-
-function showPopup(message) {
-  popup.classList.remove("hide");
-  popupMessage.innerHTML = message;
-}
-
-function hidePopup() {
-  popup.classList.add("hide");
 }
 
 function playSound(sound) {
