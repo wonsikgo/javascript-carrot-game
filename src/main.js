@@ -1,6 +1,7 @@
 "use strict";
 
 import Popup from "./popup.js";
+import * as sound from "./sound.js";
 
 const COUNT = 10;
 const POPUP_REPLAY_MESSAGE = "REPLAY?";
@@ -24,12 +25,6 @@ let playInterval = null;
 
 playBtn.addEventListener("click", onPlayGame);
 
-const bgm = new Audio("../static/sound/bg.mp3");
-const gameLoseSound = new Audio("../static/sound/alert.wav");
-const gameWinSound = new Audio("../static/sound/game_win.mp3");
-const carrotPullSound = new Audio("../static/sound/carrot_pull.mp3");
-const bugPullSound = new Audio("../static/sound/bug_pull.mp3");
-
 const gameBanner = new Popup();
 gameBanner.setEventListener(onReStartGame);
 
@@ -47,14 +42,14 @@ function onPlayGame() {
 function startGame() {
   hidePlayBtnIcon();
   showField();
-  playSound(bgm);
+  sound.playBgm();
   setTimer();
 }
 
 function stopGame() {
   showPlayBtnIcon();
   hideField();
-  stopSound(bgm);
+  sound.stopBgm();
   clearInterval(playInterval);
 }
 
@@ -128,7 +123,7 @@ function setPosition(item) {
 
 function onClickCarrot(e) {
   e.target.remove();
-  playSound(carrotPullSound);
+  sound.playCarrotPull();
   updateScore();
 }
 
@@ -142,18 +137,18 @@ function updateScore() {
 }
 
 function clearGame() {
-  playSound(gameWinSound);
+  sound.playGameWin();
   clearInterval(playInterval);
   gameBanner.show(POPUP_CLEAR_MESSAGE);
 }
 
 function onClickBug() {
-  playSound(bugPullSound);
+  sound.playBugPull();
   loseGame();
 }
 
 function loseGame() {
-  playSound(gameLoseSound);
+  sound.playGameLose();
   gameBanner.show(POPUP_REPLAY_MESSAGE);
   clearInterval(playInterval);
 }
@@ -173,13 +168,4 @@ function resetGame() {
   scoreCount = COUNT;
   score.innerHTML = scoreCount;
   field.innerHTML = "";
-}
-
-function playSound(sound) {
-  sound.currentTime = 0;
-  sound.play();
-}
-
-function stopSound(sound) {
-  sound.pause();
 }
