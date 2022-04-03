@@ -1,31 +1,31 @@
 "use strict";
 
-class Item {
-  constructor(count) {
+export default class Item {
+  constructor(count, handleCarrot, handleBug) {
     this.field = document.querySelector(".game-field");
-    this.fieldRect = field.getBoundingClientRect();
+    this.fieldRect = this.field.getBoundingClientRect();
     this.count = count;
+    this.handleCarrot = handleCarrot;
+    this.handleBug = handleBug;
   }
 
   init() {
-    score.innerHTML = scoreCount;
-
     for (let i = 0; i < this.count; i++) {
-      const carrot = create("./static/img/carrot.png");
-      const bug = create("./static/img/bug.png");
+      const carrot = this.create("./static/img/carrot.png");
+      const bug = this.create("./static/img/bug.png");
 
-      carrot.addEventListener("click", onClickCarrot);
-      bug.addEventListener("click", onClickBug);
+      carrot.addEventListener("click", this.handleCarrot);
+      bug.addEventListener("click", this.handleBug);
 
       this.field.appendChild(carrot);
       this.field.appendChild(bug);
     }
   }
 
-  create() {
+  create(src) {
     const item = document.createElement("img");
     item.src = src;
-    return setPosition(item);
+    return this.setPosition(item);
   }
 
   setPosition(item) {
@@ -36,37 +36,5 @@ class Item {
     item.style.top = `${positionY}px`;
 
     return item;
-  }
-
-  onClickCarrot(e) {
-    e.target.remove();
-    // playSound(carrotPullSound);
-    updateScore();
-  }
-
-  updateScore() {
-    scoreCount -= 1;
-    score.innerHTML = scoreCount;
-
-    if (scoreCount === 0) {
-      clearGame();
-    }
-  }
-
-  clearGame() {
-    // playSound(gameWinSound);
-    clearInterval(playInterval);
-    // gameBanner.show(POPUP_CLEAR_MESSAGE);
-  }
-
-  onClickBug() {
-    // playSound(bugPullSound);
-    loseGame();
-  }
-
-  loseGame() {
-    // playSound(gameLoseSound);
-    // gameBanner.show(POPUP_REPLAY_MESSAGE);
-    clearInterval(playInterval);
   }
 }

@@ -2,6 +2,7 @@
 
 import Popup from "./popup.js";
 import * as sound from "./sound.js";
+import Item from "./item.js";
 
 const COUNT = 10;
 const POPUP_REPLAY_MESSAGE = "REPLAY?";
@@ -28,8 +29,11 @@ playBtn.addEventListener("click", onPlayGame);
 const gameBanner = new Popup();
 gameBanner.setEventListener(onReStartGame);
 
+const item = new Item(COUNT, onClickCarrot, onClickBug);
+
 function onPlayGame() {
   initItems();
+
   if (isPlaying) {
     stopGame();
   } else {
@@ -90,35 +94,8 @@ function initItems() {
   if (isSetItem) return;
 
   score.innerHTML = scoreCount;
-
-  for (let i = 0; i < COUNT; i++) {
-    const carrot = createItem("./static/img/carrot.png");
-    const bug = createItem("./static/img/bug.png");
-
-    carrot.addEventListener("click", onClickCarrot);
-    bug.addEventListener("click", onClickBug);
-
-    field.appendChild(carrot);
-    field.appendChild(bug);
-  }
-
+  item.init();
   isSetItem = true;
-}
-
-function createItem(src) {
-  const item = document.createElement("img");
-  item.src = src;
-  return setPosition(item);
-}
-
-function setPosition(item) {
-  const positionX = Math.random() * fieldWidth;
-  const positionY = Math.random() * fieldHeight;
-
-  item.style.left = `${positionX}px`;
-  item.style.top = `${positionY}px`;
-
-  return item;
 }
 
 function onClickCarrot(e) {
