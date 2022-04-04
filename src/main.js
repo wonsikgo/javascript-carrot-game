@@ -19,8 +19,6 @@ const timer = document.querySelector(".game-timer");
 const score = document.querySelector(".game-score");
 
 const field = document.querySelector(".game-field");
-const fieldWidth = field.getBoundingClientRect().width - 80;
-const fieldHeight = field.getBoundingClientRect().height - 80;
 
 let playInterval = null;
 

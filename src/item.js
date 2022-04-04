@@ -37,4 +37,15 @@ export default class Item {
 
     return item;
   }
+
+  show() {
+    this.field.style.visibility = "visible";
+  }
+
+  hide() {
+    this.field.style.visibility = "hidden";
+  }
+  reset() {
+    this.field.innerHTML = "";
+  }
 }
