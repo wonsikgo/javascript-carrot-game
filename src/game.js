@@ -42,6 +42,10 @@ export default class Game {
     clearInterval(this.playInterval);
   }
 
+  setBannerHandler(bannerHandler) {
+    this.bannerHandler = bannerHandler;
+  }
+
   showPlayButton() {
     this.playBtnIcon.classList.remove("fa-stop");
     this.playBtnIcon.classList.add("fa-play");
@@ -93,7 +97,8 @@ export default class Game {
   clearGame() {
     sound.playGameWin();
     clearInterval(playInterval);
-    gameBanner.show(POPUP_CLEAR_MESSAGE);
+    // gameBanner.show(POPUP_CLEAR_MESSAGE);
+    this.bannerHandler("clear");
   }
 
   onClickBug() {
@@ -103,12 +108,14 @@ export default class Game {
 
   loseGame() {
     sound.playGameLose();
-    gameBanner.show(POPUP_REPLAY_MESSAGE);
+    // gameBanner.show(POPUP_REPLAY_MESSAGE);
+    this.bannerHandler("lose");
     clearInterval(playInterval);
   }
 
   onReStartGame() {
-    gameBanner.hide(POPUP_CLEAR_MESSAGE);
+    // gameBanner.hide(POPUP_CLEAR_MESSAGE);
+    this.bannerHandler("restart");
     this.resetGame();
     this.initItems();
     this.hidePlayBtnIcon();
