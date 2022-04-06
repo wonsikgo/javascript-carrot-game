@@ -19,4 +19,4 @@ game.setBannerHandler((reason) => {
   }
 });
 
-gameBanner.setEventListener(onReStartGame);
+gameBanner.setEventListener(game.onReStartGame);

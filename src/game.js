@@ -5,21 +5,25 @@ import Item from "./item.js";
 
 export default class Game {
   constructor(count, playTime) {
+    this.initCount = count;
+    this.initPlayTime = playTime;
     this.count = count;
     this.playTime = playTime;
     this.isPlaying = false;
     this.isSetItem = false;
     this.scoreCount = count;
     this.playInterval = null;
+
     this.playBtn = document.querySelector(".game-btn");
     this.playBtnIcon = document.querySelector(".play-icon");
     this.timer = document.querySelector(".game-timer");
     this.score = document.querySelector(".game-score");
     this.playBtn.addEventListener("click", this.onPlay);
+
     this.item = new Item(10, this.onClickCarrot, this.onClickBug);
   }
 
-  onPlay() {
+  onPlay = () => {
     this.initItems();
     if (this.isPlaying) {
       this.stop();
@@ -28,17 +32,19 @@ export default class Game {
     }
 
     this.isPlaying = !this.isPlaying;
-  }
+  };
 
   start() {
+    this.item.show();
+    sound.playBgm();
     this.hidePlayButton();
     this.setTimer();
-    this.item.show();
   }
 
   stop() {
-    this.showPlayButton();
     this.item.hide();
+    sound.stopBgm();
+    this.showPlayButton();
     clearInterval(this.playInterval);
   }
 
@@ -64,7 +70,7 @@ export default class Game {
         this.playTime -= 1;
         this.timer.innerHTML = `0:${this.playTime}`;
       } else if (this.playTime === 0 && this.scoreCount !== 0) {
-        loseGame();
+        this.loseGame();
       } else {
         clearInterval(this.playInterval);
       }
@@ -79,11 +85,11 @@ export default class Game {
     this.isSetItem = true;
   }
 
-  onClickCarrot(e) {
+  onClickCarrot = (e) => {
     e.target.remove();
     sound.playCarrotPull();
     this.updateScore();
-  }
+  };
 
   updateScore() {
     this.scoreCount -= 1;
@@ -96,38 +102,34 @@ export default class Game {
 
   clearGame() {
     sound.playGameWin();
-    clearInterval(playInterval);
-    // gameBanner.show(POPUP_CLEAR_MESSAGE);
+    clearInterval(this.playInterval);
     this.bannerHandler("clear");
   }
 
-  onClickBug() {
+  onClickBug = () => {
     sound.playBugPull();
     this.loseGame();
-  }
+  };
 
   loseGame() {
     sound.playGameLose();
-    // gameBanner.show(POPUP_REPLAY_MESSAGE);
     this.bannerHandler("lose");
-    clearInterval(playInterval);
+    clearInterval(this.playInterval);
   }
 
-  onReStartGame() {
-    // gameBanner.hide(POPUP_CLEAR_MESSAGE);
-    this.bannerHandler("restart");
+  onReStartGame = () => {
     this.resetGame();
     this.initItems();
-    this.hidePlayBtnIcon();
+    this.hidePlayButton();
     this.setTimer();
-  }
+    this.bannerHandler("restart");
+  };
 
   resetGame() {
     this.isPlaying = true;
     this.isSetItem = false;
-    this.playTime = 10;
-    this.scoreCount = COUNT;
-    this.score.innerHTML = this.scoreCount;
+    this.playTime = this.initPlayTime;
+    this.scoreCount = this.initCount;
     this.item.reset();
   }
 }
