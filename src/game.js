@@ -3,7 +3,23 @@
 import * as sound from "./sound.js";
 import Item from "./item.js";
 
-export default class Game {
+export default class GameBuilder {
+  gamePlayTime(playTime) {
+    this.playTime = playTime;
+    return this;
+  }
+
+  gameItemCount(count) {
+    this.count = count;
+    return this;
+  }
+
+  build() {
+    return new Game(this.count, this.playTime);
+  }
+}
+
+class Game {
   constructor(count, playTime) {
     this.initCount = count;
     this.initPlayTime = playTime;

@@ -1,12 +1,15 @@
 "use strict";
 
 import Popup from "./popup.js";
-import Game from "./game.js";
+import GameBuilder from "./game.js";
 
 const POPUP_REPLAY_MESSAGE = "REPLAY?";
 const POPUP_CLEAR_MESSAGE = "SUCCESS";
 
-const game = new Game(10, 10);
+const game = new GameBuilder()
+  .gamePlayTime(10) //
+  .gameItemCount(10)
+  .build();
 const gameBanner = new Popup();
 
 game.setBannerHandler((reason) => {
