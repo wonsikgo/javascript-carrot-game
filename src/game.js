@@ -3,7 +3,13 @@
 import * as sound from "./sound.js";
 import Item from "./item.js";
 
-export default class GameBuilder {
+export const Reason = Object.freeze({
+  clear: "SUCCESS",
+  lose: "FAIL",
+  restart: "REPLAY?",
+});
+
+export class GameBuilder {
   gamePlayTime(playTime) {
     this.playTime = playTime;
     return this;
@@ -119,7 +125,7 @@ class Game {
   clearGame() {
     sound.playGameWin();
     clearInterval(this.playInterval);
-    this.bannerHandler("clear");
+    this.bannerHandler(Reason.clear);
   }
 
   onClickBug = () => {
@@ -129,7 +135,7 @@ class Game {
 
   loseGame() {
     sound.playGameLose();
-    this.bannerHandler("lose");
+    this.bannerHandler(Reason.lose);
     clearInterval(this.playInterval);
   }
 
@@ -138,7 +144,7 @@ class Game {
     this.initItems();
     this.hidePlayButton();
     this.setTimer();
-    this.bannerHandler("restart");
+    this.bannerHandler(Reason.restart);
   };
 
   resetGame() {

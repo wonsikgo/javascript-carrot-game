@@ -1,10 +1,10 @@
 "use strict";
 
 import Popup from "./popup.js";
-import GameBuilder from "./game.js";
+import { Reason, GameBuilder } from "./game.js";
 
-const POPUP_REPLAY_MESSAGE = "REPLAY?";
-const POPUP_CLEAR_MESSAGE = "SUCCESS";
+// const POPUP_REPLAY_MESSAGE = "REPLAY?";
+// const POPUP_CLEAR_MESSAGE = "SUCCESS";
 
 const game = new GameBuilder()
   .gamePlayTime(10) //
@@ -13,12 +13,12 @@ const game = new GameBuilder()
 const gameBanner = new Popup();
 
 game.setBannerHandler((reason) => {
-  if (reason === "clear") {
-    gameBanner.show(POPUP_CLEAR_MESSAGE);
-  } else if (reason === "lose") {
-    gameBanner.show(POPUP_REPLAY_MESSAGE);
-  } else if (reason === "restart") {
-    gameBanner.hide(POPUP_CLEAR_MESSAGE);
+  if (reason === Reason.clear) {
+    gameBanner.show(Reason.clear);
+  } else if (reason === Reason.lose) {
+    gameBanner.show(Reason.lose);
+  } else if (reason === Reason.restart) {
+    gameBanner.hide();
   }
 });
 
