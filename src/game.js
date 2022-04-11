@@ -3,9 +3,11 @@
 import * as sound from "./sound.js";
 import Item from "./item.js";
 
+const LEVEL = "Level";
+
 export const Reason = Object.freeze({
-  clear: "SUCCESS",
-  lose: "FAIL",
+  win: "YOU WIN 👍",
+  lose: "YOU LOSE 🤣",
   restart: "REPLAY?",
 });
 
@@ -20,17 +22,24 @@ export class GameBuilder {
     return this;
   }
 
+  gameLevel(level) {
+    this.level = level;
+    return this;
+  }
+
   build() {
     return new Game(this.count, this.playTime);
   }
 }
 
 class Game {
-  constructor(count, playTime) {
+  constructor(count, playTime, level) {
     this.initCount = count;
     this.initPlayTime = playTime;
     this.count = count;
     this.playTime = playTime;
+    this.level = level;
+
     this.isPlaying = false;
     this.isSetItem = false;
     this.scoreCount = count;
@@ -40,9 +49,11 @@ class Game {
     this.playBtnIcon = document.querySelector(".play-icon");
     this.timer = document.querySelector(".game-timer");
     this.score = document.querySelector(".game-score");
+    this.levelField = document.querySelector(".game-level");
+
     this.playBtn.addEventListener("click", this.onPlay);
 
-    this.item = new Item(10, this.onClickCarrot, this.onClickBug);
+    this.item = new Item(this.onClickCarrot, this.onClickBug);
   }
 
   onPlay = () => {
@@ -59,6 +70,7 @@ class Game {
   start() {
     this.item.show();
     sound.playBgm();
+    this.changeLevelField();
     this.hidePlayButton();
     this.setTimer();
   }
@@ -72,6 +84,10 @@ class Game {
 
   setBannerHandler(bannerHandler) {
     this.bannerHandler = bannerHandler;
+  }
+
+  changeLevelField() {
+    this.levelField.innerHTML = `${LEVEL} ${this.level}`;
   }
 
   showPlayButton() {
@@ -103,7 +119,7 @@ class Game {
     if (this.isSetItem) return;
 
     this.score.innerHTML = this.scoreCount;
-    this.item.init();
+    this.item.init(this.count);
     this.isSetItem = true;
   }
 
@@ -125,7 +141,17 @@ class Game {
   clearGame() {
     sound.playGameWin();
     clearInterval(this.playInterval);
-    this.bannerHandler(Reason.clear);
+    this.bannerHandler(Reason.win);
+  }
+
+  upLevel() {
+    this.level++;
+    this.playTime *= this.level;
+    this.count *= this.level;
+    this.isPlaying = false;
+    this.isSetItem = false;
+
+    this.onPlay();
   }
 
   onClickBug = () => {

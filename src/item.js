@@ -1,16 +1,15 @@
 "use strict";
 
 export default class Item {
-  constructor(count, handleCarrot, handleBug) {
+  constructor(handleCarrot, handleBug) {
     this.field = document.querySelector(".game-field");
     this.fieldRect = this.field.getBoundingClientRect();
-    this.count = count;
     this.handleCarrot = handleCarrot;
     this.handleBug = handleBug;
   }
 
-  init() {
-    for (let i = 0; i < this.count; i++) {
+  init(count) {
+    for (let i = 0; i < count; i++) {
       const carrot = this.create("./static/img/carrot.png");
       const bug = this.create("./static/img/bug.png");
 
