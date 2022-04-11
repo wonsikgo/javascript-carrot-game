@@ -38,9 +38,12 @@ button:hover {
   border-radius: 5px;
   background-color: wheat;
 }
-
 .play-icon {
   font-size: 50px;
+}
+.game-level {
+  font-size: 40px;
+  font-weight: bolder;
 }
 .game-timer {
   background-color: white;
