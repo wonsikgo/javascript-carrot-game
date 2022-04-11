@@ -28,7 +28,7 @@ export class GameBuilder {
   }
 
   build() {
-    return new Game(this.count, this.playTime);
+    return new Game(this.count, this.playTime, this.level);
   }
 }
 
@@ -144,16 +144,6 @@ class Game {
     this.bannerHandler(Reason.win);
   }
 
-  upLevel() {
-    this.level++;
-    this.playTime *= this.level;
-    this.count *= this.level;
-    this.isPlaying = false;
-    this.isSetItem = false;
-
-    this.onPlay();
-  }
-
   onClickBug = () => {
     sound.playBugPull();
     this.loseGame();
@@ -165,19 +155,30 @@ class Game {
     clearInterval(this.playInterval);
   }
 
-  onReStartGame = () => {
-    this.resetGame();
-    this.initItems();
-    this.hidePlayButton();
-    this.setTimer();
+  onLevelUp = () => {
     this.bannerHandler(Reason.restart);
+    this.reset();
+    this.onPlay();
   };
 
-  resetGame() {
-    this.isPlaying = true;
-    this.isSetItem = false;
+  // onReStartGame = () => {
+  //   this.resetGame();
+  //   this.initItems();
+  //   this.hidePlayButton();
+  //   this.setTimer();
+  //   this.bannerHandler(Reason.restart);
+  // };
+
+  reset() {
+    this.level++;
     this.playTime = this.initPlayTime;
-    this.scoreCount = this.initCount;
+    this.count += this.level;
+    this.scoreCount = this.count;
+    this.score.innerHTML = this.scoreCount;
+
+    this.isPlaying = false;
+    this.isSetItem = false;
+
     this.item.reset();
   }
 }
