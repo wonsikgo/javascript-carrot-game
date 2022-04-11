@@ -10,14 +10,14 @@ const game = new GameBuilder()
   .build();
 const gameBanner = new Popup();
 
-game.setBannerHandler((reason) => {
+game.setBannerHandler((reason, message) => {
   if (reason === Reason.win) {
-    gameBanner.show(Reason.win);
+    gameBanner.show(message);
   } else if (reason === Reason.lose) {
-    gameBanner.show(Reason.lose);
+    gameBanner.show(message);
   } else if (reason === Reason.restart) {
     gameBanner.hide();
   }
 });
 
-gameBanner.setEventListener(game.onLevelUp);
+gameBanner.setEventListener(game.onRestart);

@@ -6,9 +6,9 @@ import Item from "./item.js";
 const LEVEL = "Level";
 
 export const Reason = Object.freeze({
-  win: "YOU WIN 👍",
-  lose: "YOU LOSE 🤣",
-  restart: "REPLAY?",
+  win: "win",
+  lose: "lose",
+  restart: "restart",
 });
 
 export class GameBuilder {
@@ -43,6 +43,7 @@ class Game {
     this.isPlaying = false;
     this.isSetItem = false;
     this.scoreCount = count;
+    this.totalScore = 0;
     this.playInterval = null;
 
     this.playBtn = document.querySelector(".game-btn");
@@ -131,6 +132,7 @@ class Game {
 
   updateScore() {
     this.scoreCount -= 1;
+    this.totalScore++;
     this.score.innerHTML = this.scoreCount;
 
     if (this.scoreCount === 0) {
@@ -139,9 +141,11 @@ class Game {
   }
 
   clearGame() {
+    const message = `${LEVEL} ${this.level} Clear 👍`;
+    this.bannerHandler(Reason.win, message);
     sound.playGameWin();
     clearInterval(this.playInterval);
-    this.bannerHandler(Reason.win);
+    this.level++;
   }
 
   onClickBug = () => {
@@ -150,29 +154,28 @@ class Game {
   };
 
   loseGame() {
+    const message = `Total : ${this.totalScore} 😃`;
+    this.bannerHandler(Reason.lose, message);
     sound.playGameLose();
-    this.bannerHandler(Reason.lose);
     clearInterval(this.playInterval);
+    this.level = 1;
   }
 
-  onLevelUp = () => {
+  onRestart = () => {
     this.bannerHandler(Reason.restart);
     this.reset();
     this.onPlay();
   };
 
-  // onReStartGame = () => {
-  //   this.resetGame();
-  //   this.initItems();
-  //   this.hidePlayButton();
-  //   this.setTimer();
-  //   this.bannerHandler(Reason.restart);
-  // };
-
   reset() {
-    this.level++;
+    if (this.level === 1) {
+      this.totalScore = 0;
+      this.count = this.initCount;
+    } else {
+      this.count += this.level;
+    }
+
     this.playTime = this.initPlayTime;
-    this.count += this.level;
     this.scoreCount = this.count;
     this.score.innerHTML = this.scoreCount;
 
