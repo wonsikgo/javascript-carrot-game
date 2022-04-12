@@ -77,7 +77,8 @@ class Game {
   }
 
   stop() {
-    this.item.hide();
+    //this.item.hide();
+    this.item.stopMove();
     sound.stopBgm();
     this.showPlayButton();
     clearInterval(this.playInterval);
