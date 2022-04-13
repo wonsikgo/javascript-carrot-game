@@ -85,7 +85,6 @@ export default class Item {
     this.field.style.visibility = "hidden";
   }
   reset() {
-    this.stopInterval();
     this.field.innerHTML = "";
   }
 

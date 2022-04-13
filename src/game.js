@@ -77,8 +77,7 @@ class Game {
   }
 
   stop() {
-    //this.item.hide();
-    this.item.stopMove();
+    this.item.hide();
     sound.stopBgm();
     this.showPlayButton();
     clearInterval(this.playInterval);
@@ -146,6 +145,7 @@ class Game {
     this.bannerHandler(Reason.win, message);
     sound.playGameWin();
     clearInterval(this.playInterval);
+    this.item.stopMove();
     this.level++;
   }
 
@@ -159,6 +159,7 @@ class Game {
     this.bannerHandler(Reason.lose, message);
     sound.playGameLose();
     clearInterval(this.playInterval);
+    this.item.stopMove();
     this.level = 1;
   }
 
